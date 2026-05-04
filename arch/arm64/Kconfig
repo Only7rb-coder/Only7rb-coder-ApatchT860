@@ -1,14 +1,18 @@
+config XEN_DOM0
 	def_bool y
-
 	select SWIOTLB_XEN
 	select PARAVIRT
 	help
 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
 
+config OKL4_GUEST
+	bool "OKL4 Guest Support"
 	default n
 	help
 	  Say Y if you want to run Linux as a guest of the OKL4 hypervisor
 
+config SAMSUNG_HYPERVISOR
+	bool "Samsung Hypervisor Support"
 	default n
 	help
 	  It enables a micro hypervisor.
@@ -16,38 +20,47 @@
 	  So you must check a hypX(samsung hypervisor image)
 	  RKP and etc can be loaded on it.
 
+config UH_KDP
+	bool "Kernel Data Protection (KDP)"
 	select UH
 	default n
 	help
-		it protects a kernel text and etc.
+		it protects a kernel text and etc.[cite: 1]
 
+config RKP_TEST
+	bool "RKP Test Support"
 	default n
 	help
-	  it enables rkp test.
+	  it enables rkp test.[cite: 1]
 
+config CRED_MOD_PREVENTION
+	bool "Prevent unauthorized credential modification"
 	default n
 	help
-	  Prevents unauthorized cred modification.
+	  Prevents unauthorized cred modification.[cite: 1]
 
+config KDP_TEST
+	bool "KDP Test Support"
 	default n
 	help
-	  enable KDP test.
+	  enable KDP test.[cite: 1]
 
-
+config RANDOMIZE_MODULE_REGION
+	bool "Randomize module region location"
 	default y
 	help
 	  Randomizes the location of the module region without considering the
 	  location of the core kernel. This way, it is impossible for modules
 	  to leak information about the location of core kernel data structures
 	  but it does imply that function calls between modules and the core
-	  kernel will need to be resolved via veneers in the module PLT.
+	  kernel will need to be resolved via veneers in the module PLT.[cite: 1]
 
 	  When this option is not set, the module region will be randomized over
 	  a limited range that contains the [_stext, _etext] interval of the
-	  core kernel, so branch relocations are always in range.
+	  core kernel, so branch relocations are always in range.[cite: 1]
 
-
-
+config EFI
+	bool "UEFI runtime services support"
 	select LIBFDT
 	select UCS2_STRING
 	select EFI_PARAMS_FROM_FDT
@@ -60,8 +73,10 @@
 	  by UEFI firmware (such as non-volatile variables, realtime
           clock, and platform reset). A UEFI stub is also provided to
 	  allow the kernel to be booted as an EFI application. This
-	  is only useful on systems that have UEFI firmware.
+	  is only useful on systems that have UEFI firmware.[cite: 1]
 
+config COMPAT
+	bool "Kernel support for 32-bit EL0"
 	select COMPAT_BINFMT_ELF if BINFMT_ELF
 	select HAVE_UID16
 	select OLD_SIGSUSPEND3
@@ -70,25 +85,22 @@
 	  This option enables support for a 32-bit EL0 running under a 64-bit
 	  kernel at EL1. AArch32-specific components such as system calls,
 	  the user helper functions, VFP support and the ptrace interface are
-	  handled appropriately by the kernel.
+	  handled appropriately by the kernel.[cite: 1]
 
 	  If you use a page size other than 4KB (i.e, 16KB or 64KB), please be aware
 	  that you will only be able to execute AArch32 binaries that were compiled
-	  with page size aligned segments.
+	  with page size aligned segments.[cite: 1]
 
-	  If you want to execute 32-bit userspace applications, say Y.
-
-
+	  If you want to execute 32-bit userspace applications, say Y.[cite: 1]
 
 config SEC_GTS6LWIFI_PROJECT
 	default n
 	bool "Samsung GTS6LWIFI Project"
 	help
-	  Support for Samsung GTS6LWIFI Project
+	  Support for Samsung GTS6LWIFI Project[cite: 1]
 
 config MACH_GTS6LWIFI_EUR_OPEN
         default n
         bool "Samsung GTS6LWIFI EUR OPEN"
         help
-          Support for Samsung GTS6LWIFI EUR OPEN device.
-
+          Support for Samsung GTS6LWIFI EUR OPEN device.[cite: 1]
