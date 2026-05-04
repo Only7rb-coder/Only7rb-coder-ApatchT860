@@ -1,0 +1,52 @@
+name: Remote Kernel Extractor
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_url:
+        description: 'Direct Link to Kernel.tar.gz'
+        required: true
+
+jobs:
+  download-and-extract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: main # Ensures we are working on the main branch
+
+      - name: Download Kernel Archive
+        run: |
+          echo "Downloading from: ${{ github.event.inputs.kernel_url }}"
+          # Using -L to follow redirects and -s to keep logs clean
+          curl -LS "${{ github.event.inputs.kernel_url }}" -o Kernel.tar.gz
+
+      - name: Extract Kernel
+        run: |
+          if [ -f "Kernel.tar.gz" ]; then
+            echo "Extracting..."
+            tar -xzvf Kernel.tar.gz
+            rm Kernel.tar.gz 
+          else
+            echo "Error: Download failed. Check the URL."
+            exit 1
+          fi
+
+      - name: Push to Main Branch
+        run: |
+          # Setting your specific identity
+          git config --global user.name "Only7rb-coder"
+          git config --global user.email "vamp.zodiac@gmail.com"
+          
+          git add .
+          
+          if git diff --staged --quiet; then
+            echo "No changes detected."
+          else
+            git commit -m "Extract kernel contents from remote source"
+            git push origin main
+          fi
